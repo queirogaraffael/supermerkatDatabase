@@ -1,7 +1,3 @@
-
-COMMENT ON DATABASE postgres
-    IS 'default administrative connection database';
-
 CREATE SCHEMA IF NOT EXISTS controle_estoque
     AUTHORIZATION postgres;
 
@@ -20,6 +16,14 @@ END $$;
 DO $$ BEGIN
     IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'tipo_pagamento_enum') THEN
         CREATE TYPE tipo_pagamento_enum AS ENUM ('PIX', 'CARTAO', 'DINHEIRO');
+    END IF;
+END $$;
+
+
+DO $$ 
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'status_caixa_enum') THEN
+        CREATE TYPE fluxo_caixa.status_caixa_enum AS ENUM ('ABERTO', 'FECHADO', 'EM_MANUTENCAO', 'SUSPENSO', 'EM_FECHAMENTO');
     END IF;
 END $$;
 
@@ -169,6 +173,7 @@ CREATE TABLE IF NOT EXISTS fluxo_caixa.caixa(
 	funcionario_id INT NULL,
 	
 	numero INT NOT NULL UNIQUE,
+	status fluxo_caixa.status_caixa_enum NOT NULL,
 	data_abertura TIMESTAMP NOT NULL,
 	data_fechamento TIMESTAMP NULL CHECK(data_fechamento IS NULL OR data_fechamento >= data_abertura),
 	
