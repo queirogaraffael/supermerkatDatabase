@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS controle_estoque.historico_preco (
 	
 	preco DECIMAL(10,2) NOT NULL CHECK (preco >= 0),
 	data_inicial TIMESTAMP NOT NULL,
-	data_final TIMESTAMP NOT NULL CHECK (data_final > data_inicial),
+	data_final TIMESTAMP NOT NULL CHECK (data_final >= data_inicial),
 	descricao VARCHAR(255) NOT NULL,
 	
 	FOREIGN KEY (produto_id) REFERENCES controle_estoque.produto(id) ON DELETE CASCADE
@@ -174,7 +174,7 @@ CREATE TABLE IF NOT EXISTS fluxo_caixa.caixa(
 	
 	numero INT NOT NULL UNIQUE,
 	status fluxo_caixa.status_caixa_enum NOT NULL,
-	data_abertura TIMESTAMP NOT NULL,
+	data_abertura TIMESTAMP NULL,
 	data_fechamento TIMESTAMP NULL CHECK(data_fechamento IS NULL OR data_fechamento >= data_abertura),
 	
 	FOREIGN KEY (funcionario_id) REFERENCES fluxo_caixa.funcionario(id) ON DELETE SET NULL
@@ -190,9 +190,9 @@ CREATE TABLE IF NOT EXISTS fluxo_caixa.pedido(
 	
 	data_pedido TIMESTAMP NOT NULL,
 	status fluxo_caixa.status_pedido_enum NOT NULL,
-	total_pedido DECIMAL(10,2) NOT NULL,
+	total_pedido DECIMAL(10,2) NULL,
 	data_pagamento TIMESTAMP,
-	tipo_pagamento tipo_pagamento_enum NOT NULL,
+	tipo_pagamento tipo_pagamento_enum NULL,
 	
 	FOREIGN KEY(cliente_id) REFERENCES fluxo_caixa.cliente(id),
 	FOREIGN KEY (caixa_id) REFERENCES fluxo_caixa.caixa(id)
