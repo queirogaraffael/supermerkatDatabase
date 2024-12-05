@@ -110,13 +110,15 @@ WITH PedidoTotal_1 AS (
         ip.pedido_id
 )
 UPDATE fluxo_caixa.pedido 
-SET -- OBS: Dever ser rodado em conjunto com o WITH PedidoTotal_1
-	total_pedido = (SELECT total_pedido FROM PedidoTotal_1 WHERE PedidoTotal.pedido_id = fluxo_caixa.pedido.id)
+SET 
+    total_pedido = pt.total_pedido,
     tipo_pagamento = 'PIX',
-	data_pagamento = '2024-12-04 07:45:00',
-	status = 'CONCLUIDO'
+    data_pagamento = '2024-12-04 07:45:00',
+    status = 'CONCLUIDO'
+FROM PedidoTotal_1 pt
 WHERE 
-    cliente_id = (SELECT id FROM fluxo_caixa.cliente WHERE cpf = '12345678901')
+    fluxo_caixa.pedido.id = pt.pedido_id
+    AND cliente_id = (SELECT id FROM fluxo_caixa.cliente WHERE cpf = '12345678901')
     AND caixa_id = (SELECT id FROM fluxo_caixa.caixa WHERE numero = 101)
     AND data_pedido = '2024-11-23 07:30:00';
 
@@ -206,13 +208,15 @@ WITH PedidoTotal_2 AS (
         ip.pedido_id
 )
 UPDATE fluxo_caixa.pedido 
-SET -- OBS: Dever ser rodado em conjunto com o WITH PedidoTotal_2
-	total_pedido = (SELECT total_pedido FROM PedidoTotal_2 WHERE PedidoTotal.pedido_id = fluxo_caixa.pedido.id)
+SET 
+    total_pedido = pt.total_pedido,
     tipo_pagamento = 'CARTAO',
-	data_pagamento = '2024-12-04 07:45:00',
-	status = 'CONCLUIDO'
+    data_pagamento = '2024-12-04 07:45:00',
+    status = 'CONCLUIDO'
+FROM PedidoTotal_2 pt
 WHERE 
-    cliente_id = (SELECT id FROM fluxo_caixa.cliente WHERE cpf = '23456789012')
+    fluxo_caixa.pedido.id = pt.pedido_id
+    AND cliente_id = (SELECT id FROM fluxo_caixa.cliente WHERE cpf = '23456789012')
     AND caixa_id = (SELECT id FROM fluxo_caixa.caixa WHERE numero = 102)
     AND data_pedido = '2024-11-23 07:30:00';
 
@@ -265,7 +269,7 @@ WITH PedidoID_3 AS ( -- OBS: Algumas consultas precisam rodar em conjunto com Pe
         pedido.cliente_id = cliente.id
     WHERE 
         cliente.cpf = '34567890123'
-        AND pedido.data_pedido = '2024-11-23 07:30:00'
+        AND pedido.data_pedido = '2024-11-22 07:30:00'
 	LIMIT 1
 ) 
 -- Passo 3: Aqui simula quando o Caixa passa as compras do cliente.
@@ -290,7 +294,7 @@ WHERE
         SELECT id 
         FROM fluxo_caixa.pedido
         WHERE cliente_id = (SELECT id FROM fluxo_caixa.cliente WHERE cpf = '34567890123')
-          AND data_pedido = '2024-11-23 07:30:00'
+          AND data_pedido = '2024-11-22 07:30:00'
     );
 
 -- Passo 5: Atualiza o pedido com o valor total,
@@ -305,15 +309,18 @@ WITH PedidoTotal_3 AS (
         ip.pedido_id
 )
 UPDATE fluxo_caixa.pedido 
-SET -- OBS: Dever ser rodado em conjunto com o WITH PedidoTotal_3
-	total_pedido = (SELECT total_pedido FROM PedidoTotal_3 WHERE PedidoTotal.pedido_id = fluxo_caixa.pedido.id)
+SET 
+    total_pedido = pt.total_pedido,
     tipo_pagamento = 'PIX',
-	data_pagamento = '2024-12-04 07:45:00',
-	status = 'CONCLUIDO'
+    data_pagamento = '2024-12-04 07:45:00',
+    status = 'CONCLUIDO'
+FROM PedidoTotal_3 pt
 WHERE 
-    cliente_id = (SELECT id FROM fluxo_caixa.cliente WHERE cpf = '12345678901')
-    AND caixa_id = (SELECT id FROM fluxo_caixa.caixa WHERE numero = 103)
-    AND data_pedido = '2024-11-23 07:30:00';
+    fluxo_caixa.pedido.id = pt.pedido_id
+    AND cliente_id = (SELECT id FROM fluxo_caixa.cliente WHERE cpf = '34567890123' )
+    AND caixa_id = (SELECT id FROM fluxo_caixa.caixa WHERE numero = 104)
+    AND data_pedido = '2024-11-22 07:30:00';
+
 
 -- Passo 6: Visualizar pedido final
 SELECT
@@ -330,7 +337,7 @@ JOIN
     fluxo_caixa.item_pedido ip ON p.id = ip.pedido_id
 WHERE 
     c.cpf = '34567890123'
-      AND p.data_pedido = '2024-11-23 07:30:00'
+      AND p.data_pedido = '2024-11-22 07:30:00'
 GROUP BY 
     p.id, c.cpf, p.data_pedido, p.status;
 
@@ -340,4 +347,14 @@ GROUP BY
 UPDATE fluxo_caixa.caixa
 SET data_fechamento = '2024-12-04 19:00:00'
 WHERE numero IN (101, 102, 103, 104, 105, 106);
+
+SELECT 
+    numero,
+    status, 
+    data_fechamento
+FROM 
+    fluxo_caixa.caixa
+WHERE 
+    numero IN (101, 102, 103, 104, 105, 106);
+
 

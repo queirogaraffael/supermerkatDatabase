@@ -66,12 +66,12 @@ SET valor_total = (
         notafiscal_id = (SELECT nota_fiscal_id FROM NotaFiscalID_1)
 )
 WHERE id = (SELECT nota_fiscal_id FROM NotaFiscalID_1);
-
+	
 SELECT valor_total -- Visualiza valor total
 FROM controle_estoque.nota_fiscal
 WHERE id = (SELECT nota_fiscal_id FROM NotaFiscalID_1);
 
-UPDATE controle_estoque.produto -- Passo 2: Atualiza o estoque dos produtos
+UPDATE controle_estoque.produto -- Passo 3: Atualiza o estoque dos produtos
 SET quantidade_atual = quantidade_atual + (
     SELECT COALESCE(SUM(nfp.quantidade_produto), 0)
     FROM controle_estoque.notafiscal_produto nfp
@@ -158,8 +158,7 @@ WHERE id IN (
     WHERE nfp.notafiscal_id = (SELECT nota_fiscal_id FROM NotaFiscalID_2)
 );
 
-
--- -----------------------------------------------------------------------------------------------------------
+-- ---------------------------------------------------------------------------------------------------------------------
 
 -- Atualiza o preço atual de cada produto no estoque. Ela calcula o preço médio dos produtos 
 -- com base nos valores registrados nas notas fiscais acima e em seguida aplica um aumento de 30% sobre o valor. 
@@ -178,6 +177,8 @@ WHERE id IN (
     FROM controle_estoque.notafiscal_produto
 );
 
+SELECT * FROM controle_estoque.historico_preco
+
 -- Salva os preços dos produtos em um historico.
 INSERT INTO controle_estoque.historico_preco (produto_id, preco, data_inicial, data_final, descricao)
 SELECT 
@@ -191,8 +192,15 @@ FROM
 WHERE 
     preco_atual > 0.00;
 
+SELECT * FROM controle_estoque.historico_preco
+
 -- Resolvendo criar uma promoção de abertura, o mercado resolveu criar um promoção
 -- de 15% nos preços de todos os produtos em estoque. 
 UPDATE controle_estoque.produto
 SET preco_atual = preco_atual * 0.85
 WHERE preco_atual > 0;
+
+SELECT * 
+	FROM controle_estoque.produto 
+	WHERE preco_atual > 0.0;
+
