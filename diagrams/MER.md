@@ -1,6 +1,6 @@
-#### **DIAGRAMA MER (SUPERMERKATE\_DATABASE)**
+#### **MER (SUPERMERKATE\_DATABASE)**
 
-#### 
+---
 
 #### **Fornecedor**
 
@@ -12,9 +12,9 @@
 
     
 
-    ---
+---
 
-    #### **Nota Fiscal**
+#### **Nota Fiscal**
 
 * **Atributos:**  
   * **`id` (PK)**  
@@ -23,9 +23,9 @@
   * **`Data de pagamento`**  
   * **`Tipo de pagamento`**
 
-    ---
+---
 
-    #### **Produto**
+#### **Produto**
 
 * **Atributos:**  
   * **`id` (PK)**  
@@ -35,9 +35,9 @@
   * **`Quantidade`**  
   * **`Preço`**
 
-    ---
+---
 
-    #### **Histórico de Preço**
+#### **Histórico de Preço**
 
 * **Atributos:**  
   * **`id` (PK)**  
@@ -46,22 +46,18 @@
   * **`Data final`**  
   * **`Descrição`**
 
-    ---
+---
 
-    #### 
-
-    #### 
-
-    ####  **Categoria do Produto**
+####  **Categoria do Produto**
 
 * **Atributos:**  
   * **`id` (PK)**  
   * **`Nome`**  
   * **`Descrição`**
 
-    ---
+---
 
-    #### **Pedido**
+#### **Pedido**
 
 * **Atributos:**  
   * **`id` (PK)**  
@@ -71,9 +67,9 @@
   * **`Data de pagamento`**  
   * **`Tipo de pagamento`**
 
-    ---
+---
 
-    #### **Caixa**
+#### **Caixa**
 
 * **Atributos:**  
   * **`id` (PK)**  
@@ -82,9 +78,9 @@
   * **`Data de abertura`**  
   * **`Data de fechamento`**
 
-    ---
+---
 
-    #### **Funcionário**
+#### **Funcionário**
 
 * **Atributos:**  
   * **`id` (PK)**  
@@ -97,16 +93,18 @@
   * **`Bairro`**   
   * **`Cidade`**
 
-    ---
+---
 
-    #### **Telefone do Funcionário**
+#### **Telefone do Funcionário**
 
 * **Atributos:**  
   * **`id` (PK)**  
   * **`DDD`**  
   * **`Número`**
 
-    #### **Cliente**
+---
+
+#### **Cliente**
 
 * **Atributos:**  
   * **`id` (PK)**  
@@ -118,18 +116,19 @@
   * **`Bairro`**  
   * **`Cidade`**
 
-    ---
+---
 
-    #### **Telefone do Cliente**
+#### **Telefone do Cliente**
 
 * **Atributos:**  
   * **`id` (PK)**  
   * **`DDD`**  
   * **`Número`**
 
-    ---
+---
 
-    ### **Relacionamentos**
+### **Relacionamentos**
+
 
 1. **A entidade Fornecedor se relaciona com a entidade Nota Fiscal.**
 
